@@ -1,0 +1,16 @@
+<div id="SubscriptionList">
+    <h4>My Subscriptions</h4>
+    <!-- Same kind of form as above, this one to subscribe to other users' feeds -->
+    <div id="mySubscriptions">
+        <ul class="nav nav-tabs nav-stacked nav-pills" style="margin-bottom: 20px;">
+
+        </ul>
+    </div>
+    <form id="subForm">
+        <!-- one different here is the application of the typeahead class, this allows
+             the form element to auto-complete with a typeahead script. The rest of the
+             form submission works as one would expect -->
+        <input type="text" placeholder="Enter a feed or user name" value="" id="feedQuery" class="typeahead"/>
+        <input class="btn btn-default btn-sm" type="submit" value="Add Subscription"/>
+    </form>
+</div>

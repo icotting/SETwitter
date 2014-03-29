@@ -1,0 +1,68 @@
+<ul class="nav nav-tabs nav-stacked nav-pills">
+    <!-- note the use of EL here, the expression will evaluate to the name of the class I want to use
+         for this element -->
+         <li id="feedSelector--1" class="<%- selectedFeed == -1 ? 'active' : '' %>"><a href="/main/index?selectedFeed=-1">All Subscriptions</a></li>
+</ul>
+<div id="FeedList" style="margin-bottom: 30px;">
+    <h4>My Feeds</h4>
+    <form id="newFeedForm">
+        <div class="modal fade" id="feedModal" role="dialog" aria-labelledby="feedLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="feedLabel">New Feed</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p>Enter a descriptive name for your feed.  Others will be able to search for your tweets using this name.</p>
+                        <%- contentTag('input', '', {type:'text', placeholder:'Feed Name', name:'name'}) %>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                        <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Create Feed</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <script type="text/javascript">
+      $('#feedModal').on('hidden.bs.modal', function(e) {
+        submitFeedForm();
+    });
+
+    function submitFeedForm() {
+         $.ajax({
+           type: "POST",
+           url: '/feed/addFeed',
+           data: $("#newFeedForm").serialize(), // serializes the form's elements.
+           success: function(data)
+           {
+             $("#feedView").html(data);
+
+             $.ajax({
+               type: "GET",
+               url: '/tweet/refreshTweets',
+               success: function(data) {
+                 $("#tweetView").html(data);
+               }
+             });
+           }
+         });
+      }
+    </script>
+
+    <!-- in order for an AJAX response to be used to render view state, a JSF
+         view component must be used (normal DOM elements cannot be rendered)
+         the h:panelGroup with layout 'block' will render as a div -->
+    <div id="myFeeds">
+        <ul class="nav nav-tabs nav-stacked nav-pills" style="margin-bottom: 20px;">
+          <% if (feeds) {
+            feeds.forEach(function(feed) { %>
+            <li id="feed-<%- feed.id %>" class="<%- feed.id == selectedFeed ? 'active' : '' %>"><a href="/main/index?selectedFeed=<%- feed.id   %>"><%= feed.name %></a></li>
+          <% });} %>
+        </ul>
+    <!-- this link will toggle the TwitterBootstrap modal to display the new feed form -->
+    <a class="btn btn-default btn-sm" href="#feedModal" data-toggle="modal">Add Feed</a>
+    </div>
+</div>

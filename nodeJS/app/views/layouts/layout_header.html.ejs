@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <head>
+        <title>Twitter</title>
+        <!-- this app uses Twitter Bootstrap for most of the basic view elements.
+             See http://getbootstrap.com -->
+        <link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.min.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap-theme.css" />
+
+        <!-- JQuery is included for more easily interacting with the client-side DOM
+             and as a dependency -->
+        <script type="text/javascript" src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+        <script type="text/javascript" src="/bootstrap/js/bootstrap.min.js" ></script>
+
+        <!-- typeahead.js is used for auto-completion of some form elements -->
+        <script type="text/javascript" src="/typeahead.min.js"></script>
+        <style type="text/css">
+            input[type=text], input[type=password] {
+                min-width: 300px;
+            }
+
+            input.typeahead { width: 20px; min-width: 200px;}
+
+            .tt-dropdown-menu {
+                background-color: white;
+                padding: 10px;
+                border: 1px solid #cccccc;
+                width: 200px;
+            }
+
+            .tt-suggestion {
+                font-size: 12pt;
+                color: #999999;
+                padding: 2px;
+                text-align: center;
+            }
+
+            .tt-suggestion:hover {
+                background-color: #e1edf7;
+            }
+        </style>
+    </head>

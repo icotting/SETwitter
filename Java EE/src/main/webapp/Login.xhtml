@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+    <!-- Use a general template (layout) for the basic structure of the page
+         in this case, that will just be to setup the various stylesheets and
+         script references. -->
+    <ui:composition template="Layout.xhtml">
+
+        <!-- render the portion of the page for the partial element defined as 
+             'pageBody' -->
+        <ui:define name="pageBody">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h2>Sign In</h2>
+                        <p>Use your email address to sign into an existing account.</p>
+                        <!-- standard JAAS form to authenticate a user using the continer 
+                             managed JAAS realm. See http://www.oracle.com/technetwork/java/javase/jaas/index.html -->
+                        <form method="post" action="j_security_check" name="loginForm">
+                            <p><input type="text" name="j_username" id="j_username" placeholder="Username"/></p>
+                            <p><input type="password" name="j_password" id="j_password" placeholder="Password"/></p>
+                            <input type="submit" class="btn btn-default" value="Sign In"/>
+                        </form>
+                    </div>
+                    <div class="col-md-6">
+                        <h2>Create Account</h2>
+                        <p>If you have not registered your email address, fill out the form below to create a new account.</p>
+                        <!-- The JSF form will be used to render input element bindings to the various backing beans -->
+                        <h:form id="newAccount">
+                            <!-- bindings are done using the JSF expression language in the form of pound left-bracket bean name dot field name right-bracket -->
+                            <p><h:inputText value="#{accountBean.name}" pt:placeholder="Name"/></p>
+                            <p>
+                                <h:inputText id="uname" value="#{accountBean.userName}" pt:placeholder="Username (i.e. @username)"/><br/>
+                                <small>Do not include the leading '@'</small>
+                            </p>
+                            <!-- this will render any messages in the faces context for the UI component id uname -->
+                            <p class="text-danger"><h:message for="uname"/></p>
+                            <p><h:inputText id="email" value="#{accountBean.emailAddress}" pt:placeholder="Email Address"/></p>
+                            <p class="text-danger"><h:message for="email"/></p>
+                            <p><h:inputText value="#{accountBean.location}" pt:placeholder="Location"/></p>
+                            <p>
+                                <h:inputSecret id="pass" value="#{accountBean.password}" pt:placeholder="Password"/>
+                            </p>
+                            <p class="text-danger"><h:message for="pass"/></p>
+                            <p><h:inputSecret value="#{accountBean.reenterPassword}" pt:placeholder="Reenter Password"/></p>
+                            
+                            <!-- the command button is used to provide the action to which the form will be submitted -->
+                            <h:commandButton class="btn btn-primary" value="Create Account" action="#{accountBean.createAccount()}"/>
+                        </h:form>
+                    </div>
+                </div>
+            </div>
+        </ui:define>
+    </ui:composition>
+</html>

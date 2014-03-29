@@ -1,0 +1,51 @@
+﻿@model  Twitter.Models.Account.LoginModel
+
+@{
+    Layout = "~/Shared/_Global.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>Sign In</h2>
+        <p>Use your email address to sign into an existing account.</p>
+        @using (Html.BeginForm("Index", "Login", FormMethod.Post))
+        {
+            <p>@Html.TextBoxFor(m => Model.Username, new { placeholder = "Username" })</p>
+            <p>@Html.PasswordFor(m => Model.Password, new { placeholder = "Password" })</p>
+            <input type="submit" class="btn btn-default" value="Sign In"/> <span class="text-error">&nbsp;@Html.ValidationMessage("result")</span>
+        }
+    </div>
+    <div class="col-md-6">
+        <h2>Create Account</h2>
+        <p>If you have not registered your email address, fill out the form below to create a new account.</p>
+        @using (Html.BeginForm("RegisterUser", "Login", FormMethod.Post))
+        {
+            <p>
+                @Html.TextBoxFor(m => Model.NewUser.Name, new { placeholder = "Name" })
+                <br /><span class="text-error">@Html.ValidationMessageFor(m => Model.NewUser.Name)</span>
+            </p>
+            <p>
+                @Html.TextBoxFor(m => Model.NewUser.UserName, new { placeholder = "Username (i.e. @username)" })
+                <br /><small>Do not include the leading '@@'</small>
+                <br /><span class="text-error">@Html.ValidationMessageFor(m => Model.NewUser.Name)</span>
+            </p>
+            <p>
+                @Html.TextBoxFor(m => Model.NewUser.Email, new { placeholder = "Email Address" })
+                <br /><span class="text-error">@Html.ValidationMessageFor(m => Model.NewUser.Email)</span>
+            </p>
+            <p>
+                @Html.TextBoxFor(m => Model.NewUser.Location, new { placeholder = "Location" })
+                <br /><span class="text-error">@Html.ValidationMessageFor(m => Model.NewUser.Location)</span>
+            </p>
+            <p>
+                @Html.PasswordFor(m => Model.NewUser.Password, new { placeholder = "Password" })
+                <br /><span class="text-error">@Html.ValidationMessageFor(m => Model.NewUser.Password)</span>
+            </p>                                                
+            <p>
+                @Html.PasswordFor(m => Model.NewUser.ReenterPassword, new { placeholder = "Reenter Password" })
+                <br /><span class="text-error">@Html.ValidationMessageFor(m => Model.NewUser.ReenterPassword)</span>
+            </p>
+            <input type="submit" class="btn btn-primary" value="Create Account"/> 
+        }
+    </div>
+</div>

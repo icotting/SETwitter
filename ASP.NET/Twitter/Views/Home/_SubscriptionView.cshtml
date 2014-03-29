@@ -1,0 +1,16 @@
+﻿@model Twitter.Models.Home.HomeViewModel
+
+<h4>My Subscriptions</h4>
+<div style="margin-bottom: 10px;">
+    <ul class="nav nav-tabs nav-stacked nav-pills">
+        @foreach (var feed in Model.Subscriptions)
+        {
+            <li id="feedSelector-@(feed.ID)" class="@((feed.ID == Model.DisplayFeed) ? "active" : "")"><a href="/home/index?selectedFeed=@(feed.ID)">@Html.DisplayFor(m => feed.Name)</a></li>
+        }
+    </ul>
+</div>
+@using (Ajax.BeginForm("SubscribeToFeed", "Home", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "contentStage" }))
+{
+    <input id="feedQuery" name="subscribeTo" class="fluid typeahead" type="text" placeholder="Enter a feed or username" />
+    <input type="submit" class="btn btn-default btn-sm" value="Add Subscription" />
+}

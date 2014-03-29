@@ -1,0 +1,40 @@
+<div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Sign In</h2>
+                <p>Use your email address to sign into an existing account.</p>
+                <form action="/user/authenticate" method="POST">
+                    <p><%- contentTag('input', loginname, {type:'text', placeholder:'Username', name:'loginname'}) %></p>
+                    <p><%- contentTag('input', loginpassword, {type:'password', placeholder:'password', name:'loginpassword'}) %></p>
+                    <input type="submit" class="btn btn-default" value="Sign In"/>
+                </form>
+                <div style="margin-top: 20px;">
+                    <% if(params.errors) { %>
+                        <div class="control-group">
+                            <% for(var err in params.errors) { %>
+                                <span class="text-danger"><%= params.errors[err]; %></span><br/>
+                            <% } %>
+                        </div>
+                    <% } %>  
+                </div>              
+            </div>
+            <div class="col-md-6">
+                <h2>Create Account</h2>
+                <p>If you have not registered your email address, fill out the form below to create a new account.</p>
+
+                <form id="course-form" action="/user/newUser" method="POST">
+                    <p><%- contentTag('input', newuser.name, {type:'text', placeholder:'Name', name:'name'}) %></p>
+                    <p>
+                        <%- contentTag('input', newuser.username, {type:'text', placeholder:'Username (i.e. @username)', name:'username'}) %>
+                        <br/>
+                        <small>Do not include the leading '@'</small>
+                    </p>
+                    <p><%- contentTag('input', newuser.email, {type:'text', placeholder:'Emal Address', name:'email'}) %></p>
+                    <p><%- contentTag('input', newuser.location, {type:'text', placeholder:'Location', name:'location'}) %></p>   
+                    <p><%- contentTag('input', newuser.password, {type:'password', placeholder:'Password', name:'password'}) %></p>
+                    <p><%- contentTag('input', newuser.confirmpassword, {type:'password', placeholder:'Confirm Password', name:'confirmpassword'}) %></p>
+                    <input type="submit" class="btn btn-primary" value="Create Account"/>                 
+                </form>
+            </div>
+        </div>
+    </div>

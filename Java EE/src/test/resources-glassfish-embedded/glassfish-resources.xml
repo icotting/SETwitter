@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE resources PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 Resource Definitions//EN" "http://glassfish.org/dtds/glassfish-resources_1_5.dtd">
+<resources>
+    <jdbc-connection-pool datasource-classname="com.mysql.jdbc.jdbc2.optional.MysqlDataSource" res-type="javax.sql.DataSource" name="twitterPool">
+        <property name="url" value="jdbc:mysql://localhost:3306/seTwitter_Test"></property>
+        <property name="user" value="dev"></property>
+        <property name="password" value="dev"></property>
+    </jdbc-connection-pool>
+    <jdbc-resource pool-name="twitterPool" jndi-name="Twitter_ds"></jdbc-resource>
+</resources>

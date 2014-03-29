@@ -1,0 +1,40 @@
+﻿@model Twitter.Models.Home.HomeViewModel
+
+<h4>My Feeds</h4>
+@using (Ajax.BeginForm("CreateFeed", "Home", new AjaxOptions() { UpdateTargetId = "FeedList", HttpMethod = "POST" }, new { id = "FeedForm" }))
+{
+    <div class="modal fade" id="feedModal" role="dialog" aria-labelledby="feedLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="myModalLabel">New Feed</h3>
+                </div>
+                <div class="modal-body">
+                    <p>Enter a descriptive name for your feed.  Others will be able to search for your tweets using this name.</p>
+                    @Html.TextBoxFor(m => m.NewFeedName, new { placeholder = "Feed Name" })
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Create Feed</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    $('#feedModal').on('hidden.bs.modal', function (e) {
+        $('#FeedForm').submit();
+    })
+</script>
+
+<div style="margin-bottom: 10px;">
+    <ul class="nav nav-tabs nav-stacked nav-pills">
+        @foreach (var feed in Model.Feeds)
+        {
+            <li id="feedSelector-@(feed.ID)" class="@((feed.ID == Model.DisplayFeed) ? "active" : "")"><a href="/home/index?selectedFeed=@(feed.ID)">@Html.DisplayFor(m => feed.Name)</a></li>
+        }
+    </ul>
+</div>
+<a class="btn btn-default btn-sm" href="#feedModal" data-toggle="modal">Add Feed</a>

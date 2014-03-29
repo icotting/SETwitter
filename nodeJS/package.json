@@ -1,0 +1,10 @@
+{
+  "name": "SETwitter_Javascript",
+  "version": "0.0.1",
+  "author": "",
+  "dependencies": {    "geddy": "0.12.5" },
+  "devDependencies": {},
+  "engines": {
+    "node": "0.8.x"
+  }
+}

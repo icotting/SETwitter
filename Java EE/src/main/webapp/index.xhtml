@@ -1,0 +1,220 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+    <!-- Use a general template (layout) for the basic structure of the page
+     in this case, that will just be to setup the various stylesheets and
+     script references. -->
+    <ui:composition template="Layout.xhtml">
+
+        <!-- render the portion of the page for the partial element defined as 
+             'pageBody' -->
+        <ui:define name="pageBody">
+            <div class="container">
+                <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <div class="navbar-inner">
+                        <div class="container">
+                            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                                <div style="padding-top: 5px;" class="navbar-form pull-right">
+                                    <!-- The JSF form will be used to render input element bindings to the various backing beans -->
+                                    <h:form>
+                                        <!-- bindings are done using the JSF expression language in the form of pound left-bracket bean name dot field name right-bracket -->
+                                        <h:inputText value="#{tweetBean.searchQuery}" pt:placeholder="Search Tweets ..."/>&nbsp;
+
+                                        <!-- The command button is used to provide the action to which the form will be submitted.
+                                             This will initiate a new request / response life cycle and pass the bound parameters
+                                             as part of the request body -->
+                                        <h:commandButton action="#{tweetBean.search()}" value="Search" class="btn btn-success btn-sm"/>&nbsp;&nbsp;
+                                        
+                                        <!-- this will submit the form below to trigger the logoff action by 'clicking' the command button. I do this 
+                                             so that I can keep the buttons inline on the header bar -->
+                                        <input type="button" value="Log OFf" class="btn btn-danger btn-sm" onclick="$('#logoff\\:logoffbtn').click()"/>
+                                    </h:form>
+                                    <h:form id="logoff">
+                                        <!-- hidden button to trigger a log off action -->
+                                        <h:commandButton style="display: none" id="logoffbtn" action="#{userBean.logoff()}" />
+                                    </h:form>
+                                </div>
+                            </div><!--/.nav-collapse -->
+                        </div>
+                    </div>
+                </nav>
+
+                <div class="page-header" style="padding-top: 40px;">
+                    <h1>Twitter <small>ok, not really</small></h1>
+                </div>
+                <div class="row-fluid" id="PageRow">
+                    <div class="col-md-3">
+                        <ul class="nav nav-tabs nav-stacked nav-pills">
+                            <!-- note the use of EL here, the expression will evaluate to the name of the class I want to use 
+                                 for this element -->
+                            <li id="feedSelector--1" class='#{feedBean.selectedFeed eq -1 and tweetBean.searchQuery eq null ? "active" : "" }'><a href="index.xhtml">All Subscriptions</a></li>
+                        </ul>
+                        <div id="FeedList" style="margin-bottom: 30px;">
+                            <h4>My Feeds</h4>
+                            <h:form id="feedForm">
+                                <!-- hidden element to ensure that this state is passed to the new request -->
+                                <h:inputHidden value="#{feedBean.selectedFeed}"/>
+                                <div class="modal fade" id="feedModal" role="dialog" aria-labelledby="feedLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                <h3 id="feedLabel">New Feed</h3>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Enter a descriptive name for your feed.  Others will be able to search for your tweets using this name.</p>
+                                                <h:inputText value="#{feedBean.newFeedName}" id="feedName" pt:placeholder="Feed Name"/>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                                                <!-- This command button will work like the ones that we've seen so far with the 
+                                                     exception of the included AJAX tag. The inclusion of this tag will cause the 
+                                                     action to be submitted without initiating a new view state. A new request will
+                                                     will be initiated and the response will be used to update the current view 
+                                                     state. This will allow me to perform certain actions that should not have 
+                                                     navigation implications (i.e be back button accessible) - basically anything 
+                                                     that immutably modifies state should not result in a navigation event.
+                                                     
+                                                     An onclick event is also added to dismiss the modal dialog as the page 
+                                                     will not be refreshed. 
+                                                -->
+                                                <h:commandButton value="Create Feed" action="#{feedBean.addFeed()}" class="btn btn-primary" 
+                                                                 onclick="$('#feedModal').modal('hide');">
+                                                    
+                                                    <!-- note the render attribute, this is the list of JSF components that will be updated 
+                                                         in the view state with the response from the server. The execution should be this 
+                                                         form (i.e. @form) -->
+                                                    <f:ajax execute="@form" render=":myFeeds feedForm:feedName :newTweet :tweetForm :feedWarning"/>
+                                                </h:commandButton>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </h:form>
+
+                            <!-- in order for an AJAX response to be used to render view state, a JSF 
+                                 view component must be used (normal DOM elements cannot be rendered)
+                                 the h:panelGroup with layout 'block' will render as a div -->
+                            <h:panelGroup layout="block" id="myFeeds">
+                                <ul class="nav nav-tabs nav-stacked nav-pills" style="margin-bottom: 20px;">
+                                    <!-- the forEach tag is part of the JSTL rather than JSF component set, for 
+                                         pure JSF, you can use an h:dataTable. I am using the JSTL iterator as 
+                                         I do not want table HTML created -->
+                                    <c:forEach items="#{feedBean.feeds}" var="feed">
+                                        <!-- EL used to determine DOM node class, also note the use of an expression in the href 
+                                             attribute of the a tag 
+                                        
+                                             Here I am just using a regular link to update the page. This is done rather than 
+                                             using AJAX as the selection of a feed to view should trigger a navigation event
+                                             so that the back button will work; same with search. AJAX is fine and good, but 
+                                             can be overdone. 
+                                        -->
+                                        <li id="feedSelector-#{feed.id}" class='#{feedBean.selectedFeed eq feed.id ? "active" : ""}'><a href="index.xhtml?feed=#{feed.id}">#{feed.name}</a></li>
+                                    </c:forEach>
+                                </ul>
+                            </h:panelGroup>
+                            <!-- this link will toggle the TwitterBootstrap modal to display the new feed form -->
+                            <a class="btn btn-default btn-sm" href="#feedModal" data-toggle="modal">Add Feed</a>
+                        </div>
+                        <div id="SubscriptionList">
+                            <h4>My Subscriptions</h4>
+                            <!-- Same kind of form as above, this one to subscribe to other users' feeds -->
+                            <h:panelGroup layout="block" id="mySubscriptions">
+                                <ul class="nav nav-tabs nav-stacked nav-pills" style="margin-bottom: 20px;">
+                                    <c:forEach items="#{feedBean.subscriptions}" var="feed">
+                                        <li id="feedSelector-#{feed.id}" class='#{feed.id == feedBean.selectedFeed ? "active" : "" }'><a href="index.xhtml?feed=#{feed.id}">#{feed.name} by #{feed.owner.name}</a></li>
+                                    </c:forEach>
+                                </ul>
+                            </h:panelGroup>
+                            <h:form id="subForm">
+                                <!-- one different here is the application of the typeahead class, this allows
+                                     the form element to auto-complete with a typeahead script. The rest of the 
+                                     form submission works as one would expect -->
+                                <h:inputText pt:placeholder="Enter a feed or user name" value="#{feedBean.subscribeTo}" id="feedQuery" class="typeahead"/>
+                                <h:commandButton value="Add Subscription" action="#{feedBean.subscribeToFeed()}" class="btn btn-default btn-sm" style="margin-top: 20px;">
+                                    <f:ajax execute="@form" render=":mySubscriptions :submsg :tweets @form"/>
+                                </h:commandButton>
+                            </h:form>
+                            <h:message for="feedQuery" id="submsg"/>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <h:panelGroup layout="block" id="feedWarning">
+                            <!-- note the use of a render expression in this panel group, the UIComponent will
+                                 only be rendered into HTML if the expression evaluates to true. This is why
+                                 the panelGroup here is nested in another panel group, so that this is evaluated
+                                 when an AJAX response updates the page as happens when the first feed is created -->
+                            <h:panelGroup layout="block" rendered="#{feedBean.feeds.size() eq 0}" class="alert alert-danger alert-dismissable">
+                                <h4 class="alert-heading">Oh snap! You don't have any feeds!</h4>
+                                <p>You can't start tweeting until you have at least one feed to post the tweet to. You can view as many tweets as you like, but it won't be nearly as interesting until you can post your own.</p>
+                            </h:panelGroup>
+
+                            <h:panelGroup layout="block" id="newTweet">
+                                <!-- the new tweet form is only rendered if there is a feed to post a tweet to -->
+                                <h:panelGroup layout="block" rendered="#{feedBean.feeds.size() gt 0}">
+                                    <h:form id="tweetForm">
+                                        <!-- make sure the currently selected feed is passed on the request -->
+                                        <h:inputHidden value="#{feedBean.selectedFeed}"/>
+                                        <h:selectOneMenu value="#{tweetBean.tweetToFeed}">
+                                            <c:forEach items="#{feedBean.feeds}" var="feed">
+                                                <f:selectItem itemValue="#{feed.id}" itemLabel="#{feed.name}"/>
+                                            </c:forEach>
+                                        </h:selectOneMenu><br/>
+                                        <h:inputTextarea value="#{tweetBean.tweetContent}" style="margin-top: 10px; margin-bottom: 20px; width: 90%; font-size: 16pt" rows="3" pt:placeholder="Compose a new tweet ..."/><br/>
+                                        <!-- AJAX submission similar to the creation of a new feed -->
+                                        <h:commandButton value="Tweet" class="btn btn-primary" action="#{tweetBean.postTweet()}">
+                                            <f:ajax execute="@form" render=":newTweet :tweets"/>
+                                        </h:commandButton>
+                                    </h:form>
+                                </h:panelGroup>    
+                            </h:panelGroup>
+
+                            <h3>Tweets</h3>
+                            <!-- iterator for the tweet collection -->
+                            <h:panelGroup id="tweets" layout="block">
+                                <c:forEach items="#{tweetBean.tweets}" var="tweet">
+                                    <!-- Note, if I would use tweet display elsewhere in the app 
+                                         I would have impemented a custom tag for this. -->
+                                    <div class="well">
+                                        <h3>
+                                            <small>Posted by #{tweet.belongsTo.owner.name} in
+                                                #{tweet.belongsTo.name} at
+                                                <h:outputText value="#{tweet.postDate}">
+                                                    <f:convertDateTime pattern="MMM dd, yyyy hh:mm:ss a"/>
+                                                </h:outputText>
+                                            </small><br />
+                                            #{tweet.content}
+                                        </h3>
+                                    </div>
+                                </c:forEach>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Javascript that sets up the typeahead functionality
+                 on the input above. Uses a JQuery id selector -->
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    $('#subForm\\:feedQuery').typeahead({
+                        name: "feeds",
+                        local: #{feedBean.subscriptionString}
+                    });
+                });
+            </script>
+        </ui:define>
+    </ui:composition>
+</html>
