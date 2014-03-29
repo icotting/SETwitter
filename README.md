@@ -38,3 +38,11 @@ configuration uses the following JDBC connection pool configuration:
     <jdbc-resource pool-name="twitterPool" jndi-name="Twitter_ds"></jdbc-resource>
 
 The easiest configuration is to create two MySQL databases seTwitter and seTwitter_Test with user 'dev' @localhost and password 'dev' as credentials. Assuming MySQL is running on the default port, and the JAAS realm as been setup in Glassfish, everything should work as expected.
+
+
+C#
+===========================
+
+An example ASP.NET MVC 4 Project for my Software Engineering course.
+
+This project is configured to use an embedded LocalDb database. Packages are managed with NUGet and, with a package restore completed, the example should run 'out of the box'.
