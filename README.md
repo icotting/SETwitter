@@ -5,8 +5,7 @@ This project contains a set of examples used in my Intro to Software Engineering
 
 * Java EE 7
 * ASP.NET MVC with C#
-* Javascript with nodeJS and Geddy
+* Javascript with Express JS for the backend and Backbone HTML5 webapp for the front end
 * iOS with Objective C
-* HTML5 client-side view with Ember on the client nad Express on the server
 
 NOTE: the iOS project uses the Express backend as its server
