@@ -7,6 +7,7 @@ using Twitter_Shared.Data;
 using System.Data.Entity;
 using Twitter.Application.Service;
 using Twitter_Shared.Service;
+using Twitter.Application.Data;
 
 namespace Twitter.Application
 {
@@ -27,7 +28,10 @@ namespace Twitter.Application
 
             /* register the data related components with Unity */
             container.RegisterType(typeof(IUnitOfWork), typeof(UnitOfWork));
-            container.RegisterType(typeof(IEntityRepository<>), typeof(EntityRepository<>));
+            container.RegisterType(typeof(IFeedRepository), typeof(FeedRepository));
+            container.RegisterType(typeof(IUserRepository), typeof(UserRepository));
+            container.RegisterType(typeof(ITweetRepository), typeof(TweetRepository));
+
             container.RegisterType(typeof(DbContext), typeof(TwitterContext));
 
             /* register the services with Unity */

@@ -8,9 +8,9 @@ using System.Linq.Expressions;
 using System.Web;
 using Twitter_Shared.Data;
 
-namespace Twitter.Application
+namespace Twitter_Shared.Data
 {
-    public class EntityRepository<T> : IEntityRepository<T> where T : class
+    public abstract class EntityRepository<T> where T : class
     {
         private readonly DbSet<T> _dbSet;
         private readonly IDbSetFactory _dbSetFactory;

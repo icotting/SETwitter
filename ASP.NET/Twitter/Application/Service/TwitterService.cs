@@ -10,16 +10,16 @@ namespace Twitter.Application.Service
 {
     public class TwitterService : ITwitterService
     {
-        private IEntityRepository<Feed> _feedRepository;
-        private IEntityRepository<User> _userRepository;
-        private IEntityRepository<Tweet> _tweetRepository;
+        private IFeedRepository _feedRepository;
+        private IUserRepository _userRepository;
+        private ITweetRepository _tweetRepository;
 
         /* The repository values will be injected into the class when 
          * the dependency injection framework calls the constructor
          */
-        public TwitterService(IEntityRepository<Feed> feedRepository, 
-            IEntityRepository<User> userRepository, 
-            IEntityRepository<Tweet> tweetRepository)
+        public TwitterService(IFeedRepository feedRepository, 
+            IUserRepository userRepository, 
+            ITweetRepository tweetRepository)
         {
             _userRepository = userRepository;
             _feedRepository = feedRepository;

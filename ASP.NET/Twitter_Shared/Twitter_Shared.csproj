@@ -46,10 +46,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\EntityRepository.cs" />
     <Compile Include="Data\IDbContext.cs" />
     <Compile Include="Data\IDbSetFactory.cs" />
+    <Compile Include="Data\IFeedRepository.cs" />
     <Compile Include="Data\IEntityRepository.cs" />
+    <Compile Include="Data\ITweetRepository.cs" />
     <Compile Include="Data\IUnitOfWork.cs" />
+    <Compile Include="Data\IUserRepository.cs" />
     <Compile Include="Data\Model\Feed.cs" />
     <Compile Include="Data\Model\Tweet.cs" />
     <Compile Include="Data\Model\User.cs" />

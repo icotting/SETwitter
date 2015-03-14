@@ -130,12 +130,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Application\EntityRepository.cs" />
+    <Compile Include="Application\FeedRepository.cs" />
     <Compile Include="Application\Service\TwitterService.cs" />
     <Compile Include="Application\Service\UserService.cs" />
+    <Compile Include="Application\TweetRepository.cs" />
     <Compile Include="Application\TwitterContext.cs" />
     <Compile Include="Application\UnitOfWork.cs" />
     <Compile Include="Application\Bootstrapper.cs" />
+    <Compile Include="Application\UserRepository.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Global.asax.cs">

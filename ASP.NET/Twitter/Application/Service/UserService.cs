@@ -10,9 +10,9 @@ namespace Twitter.Application.Service
 {
     public class UserService : IUserService
     {
-        private IEntityRepository<User> _userRepository;
+        private IUserRepository _userRepository;
 
-        public UserService(IEntityRepository<User> userRepository)
+        public UserService(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }

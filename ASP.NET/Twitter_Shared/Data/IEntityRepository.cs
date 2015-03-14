@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Twitter_Shared.Data
 {
-    // http://efpatterns.codeplex.com/SourceControl/changeset/view/7f1a9beddf25#Main/EntityFramework.Patterns/IRepository.cs
     public interface IEntityRepository<T> where T : class
     {
         IQueryable<T> AsQueryable();
