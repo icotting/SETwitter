@@ -1,0 +1,10 @@
+{
+  "sources": [
+    "src/0 - Clients",
+    "src/1 - Services",
+    "src/2 - Components",
+    "src/3 - Repositories",
+    "src/4 - Core",
+    "test"
+  ]
+}
