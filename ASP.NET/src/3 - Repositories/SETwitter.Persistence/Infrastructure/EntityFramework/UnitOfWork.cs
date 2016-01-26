@@ -1,7 +1,7 @@
 ﻿using SETwitter.Repositories.Infrastructure;
 using System;
 
-namespace Analytics.Persistence.Infrastructure.EntityFramework
+namespace SETwitter.Persistence.Infrastructure.EntityFramework
 {
     public class UnitOfWork : IUnitOfWork, IDisposable
     {

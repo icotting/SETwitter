@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.Data.Entity.Extensions;
 
-namespace Analytics.Persistence.Infrastructure.EntityFramework
+namespace SETwitter.Persistence.Infrastructure.EntityFramework
 {
     public abstract class EntityRepository<T> where T : class
     {

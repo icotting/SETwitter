@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Data.Entity;
 
-namespace Analytics.Persistence.Infrastructure.EntityFramework
+namespace SETwitter.Persistence.Infrastructure.EntityFramework
 {
     // http://efpatterns.codeplex.com/SourceControl/changeset/view/7f1a9beddf25#Main/EntityFramework.Patterns/IObjectSetFactory.cs
     public interface IDbSetFactory : IDisposable

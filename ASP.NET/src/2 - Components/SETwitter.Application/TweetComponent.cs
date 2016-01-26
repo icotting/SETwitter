@@ -1,4 +1,5 @@
-﻿using SETwitter.Domain;
+﻿using SETwitter.Components.Application;
+using SETwitter.Domain;
 using SETwitter.Repositories.Persistence;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SETwitter.Application
 {
-    public class TweetComponent
+    public class TweetComponent : ITweetComponent
     {
         private IFeedRepository _feedRepository;
         private IUserRepository _userRepository;
@@ -40,9 +41,9 @@ namespace SETwitter.Application
         {
             if (user.Subscriptions == null)
             {
-                user.Subscriptions = new List<Feed>();
+                user.Subscriptions = new List<FeedSubscription>();
             }
-            user.Subscriptions.Add(feed);
+            user.Subscriptions.Add(new FeedSubscription() { Feed = feed, FeedId = feed.Id, User = user, UserId = user.Id });
             _userRepository.Update(user);
         }
 
@@ -67,7 +68,7 @@ namespace SETwitter.Application
 
             foreach (Feed f in feeds)
             {
-                if (f.Subscribers.Contains(user) == false)
+                if (f.Subscribers.Where(s => s.UserId == user.Id).Count() == 0)
                 {
                     filtered.Add(f);
                 }

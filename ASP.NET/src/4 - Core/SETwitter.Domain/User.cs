@@ -11,6 +11,6 @@ namespace SETwitter.Domain
         public string Password { get; set; }
         public string UserName { get; set; }
         public virtual ICollection<Feed> Feeds { get; set; }
-        public virtual ICollection<Feed> Subscriptions { get; set; }
+        public virtual ICollection<FeedSubscription> Subscriptions { get; set; }
     }
 }

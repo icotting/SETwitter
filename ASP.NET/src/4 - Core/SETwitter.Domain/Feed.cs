@@ -9,7 +9,7 @@ namespace SETwitter.Domain
 
         public string Name { get; set; }
         public virtual ICollection<Tweet> Tweets { get; set; }
-        public virtual ICollection<User> Subscribers { get; set; }
+        public virtual ICollection<FeedSubscription> Subscribers { get; set; }
         public User Owner { get; set; }
     }
 }

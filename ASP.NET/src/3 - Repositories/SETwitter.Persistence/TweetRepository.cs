@@ -1,5 +1,5 @@
-﻿using Analytics.Persistence.Infrastructure.EntityFramework;
-using SETwitter.Domain;
+﻿using SETwitter.Domain;
+using SETwitter.Persistence.Infrastructure.EntityFramework;
 using SETwitter.Repositories.Persistence;
 using System;
 using System.Collections.Generic;

@@ -1,11 +1,13 @@
 ﻿using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Infrastructure;
+using SETwitter.Domain;
+using SETwitter.Persistence.Infrastructure.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Analytics.Persistence.Infrastructure.EntityFramework
+namespace SETwitter.Persistence
 {
     public class PersistenceContext : DbContext
     {
@@ -18,6 +20,31 @@ namespace Analytics.Persistence.Infrastructure.EntityFramework
         public PersistenceContext(IServiceProvider serviceProvider, DbContextOptions options)
             : base(serviceProvider, options)
         { }
+
+        public DbSet<Feed> Feeds { get; set; }
+        public DbSet<Tweet> Tweets { get; set; }
+        public DbSet<User> Users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Tweet>().HasKey(t => t.Id);
+            modelBuilder.Entity<Feed>().HasKey(f => f.Id);
+            modelBuilder.Entity<User>().HasKey(u => u.Id);
+
+            modelBuilder.Entity<User>()
+                .HasMany<Feed>(u => u.Feeds)
+                .WithOne(f => f.Owner).OnDelete(Microsoft.Data.Entity.Metadata.DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Feed>()
+                .HasMany<Tweet>(f => f.Tweets).WithOne(t => t.BelongsTo).OnDelete(Microsoft.Data.Entity.Metadata.DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<FeedSubscription>().HasOne<User>(s => s.User).WithMany(u => u.Subscriptions).HasForeignKey(s => s.UserId);
+            modelBuilder.Entity<FeedSubscription>().HasOne<Feed>(s => s.Feed).WithMany(f => f.Subscribers).HasForeignKey(s => s.FeedId);
+
+            modelBuilder.Entity<Tweet>().HasOne<Feed>(t => t.BelongsTo).WithMany(f => f.Tweets).OnDelete(Microsoft.Data.Entity.Metadata.DeleteBehavior.Restrict);
+        }
     }
 
     public class PersistenceContextAdapter : IDbSetFactory, IDbContext
