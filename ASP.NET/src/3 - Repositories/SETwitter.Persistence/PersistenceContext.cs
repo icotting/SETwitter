@@ -32,6 +32,7 @@ namespace SETwitter.Persistence
             modelBuilder.Entity<Tweet>().HasKey(t => t.Id);
             modelBuilder.Entity<Feed>().HasKey(f => f.Id);
             modelBuilder.Entity<User>().HasKey(u => u.Id);
+            modelBuilder.Entity<FeedSubscription>().HasKey(s => s.Id);
 
             modelBuilder.Entity<User>()
                 .HasMany<Feed>(u => u.Feeds)
